@@ -1,0 +1,12 @@
+
+FFLAGS =  -c -W -O3 -fno-automatic -ffixed-line-length-132
+
+SRSFILES = $(FFILES)
+
+OBJFILES = $(FFILES:.f=.o)
+
+$(NAME):	$(OBJFILES)
+	gfortran -o $(NAME) *.o
+	mv $(NAME) /home/llp/bin
+.f.o:
+	gfortran $(FFLAGS)  $*.f

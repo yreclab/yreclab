@@ -1,0 +1,141 @@
+ $CONTROL
+
+ DESCRIP(1) = "model4.31 run. diffusion pre-MS. Alexander06/OP95/Potekhin opacity"
+ DESCRIP(2) = "Kurucz Atm; SCV/OPAL06 EOS"
+
+
+ LCALS = .FALSE.
+ TOLL = 5.0D-6
+ TOLR = 5.0D-6
+
+ LCALST = .FALSE.
+ XLS = 8.945D0
+ XLSTOL = 0.05D0
+ LTEFF = .TRUE.
+ STEFF = 6050.0D0
+
+ LZRAMP = .FALSE.
+
+ NUMRUN = 2
+
+ KINDRN(1) = 3
+ LFIRST(1) = .TRUE.
+ RSCLM(1) = 1.000
+ RSCLCM(1) = -0.8D0
+ RSCLX(1) = 0.7074742623781584
+ RSCLZ(1) = 0.0189044608031009
+ NMODLS(1) = 2
+ XENV0A(1) = 0.7074742623781584
+ ZENV0A(1) = 0.0189044608031009
+ CMIXLA(1) = 1.9324090943406085
+ LSENV0A(1) = .FALSE.
+ SENV0A(1) = -1.0D-7
+
+ KINDRN(2) = 1
+ LFIRST(2) = .FALSE.
+ NMODLS(2) = 50000
+ XENV0A(2) = 0.7074742623781584
+ ZENV0A(2) = 0.0189044608031009
+ CMIXLA(2) = 1.9324090943406085
+ ENDAGE(2) = 4.568D9
+
+ LSTORE = .TRUE.
+
+ LTRACK = .TRUE.
+ ITRVER = 0
+
+ LRWSH = .FALSE.
+ LCORR = .TRUE.
+
+ LPULSE = .FALSE.
+ IPVER = 3
+ LPOUT = .FALSE.
+ POMAX = 0.15D0
+ POA = 1.0D0
+ POB = 10.0D0
+ POC = 0.0D0
+
+ LDEBUG = .FALSE.
+ NPOINT = -1
+
+ LMILNE = .FALSE.
+
+ LALEX06 = .TRUE.
+ FALEX06 = "input/opacity/alex06/alexmol06gs98.tab"
+
+ LALEX95 = .FALSE.
+ ZALEX1 = 0.0182140
+ OPECALEX(1) = "input/opacity/alex/OPACALEXANDER.X00"
+ OPECALEX(2) = "input/opacity/alex/OPACALEXANDER.X01"
+ OPECALEX(3) = "input/opacity/alex/OPACALEXANDER.X02"
+ OPECALEX(4) = "input/opacity/alex/OPACALEXANDER.X035"
+ OPECALEX(5) = "input/opacity/alex/OPACALEXANDER.X05"
+ OPECALEX(6) = "input/opacity/alex/OPACALEXANDER.X07"
+ OPECALEX(7) = "input/opacity/alex/OPACALEXANDER.X08"
+
+ LKUR90 = .FALSE.
+ ZKUR1 = 0.01880
+ ZKUR2 = 0.02155
+ FKUR = "input/opacity/kurmol/kapp00.ross"
+ FKUR2 = "input/opacity/kurmol/kapp01.ross"
+
+ LOPAL95 = .TRUE.
+ ZOPAL951 = 0.0182140
+ FLIV95 = "input/opacity/opal95/GS98.OP17"
+
+ LOPAL92 = .FALSE.
+ FLLDAT = "input/opacity/opal92/G93/z01700.g93opal"
+ ZOPAL1 = 0.01700
+ ZOPAL2 = 0.02300
+ FOPAL2 = "input/opacity/opal92/G93/z02300.g93opal"
+
+ LLAOL89 = .FALSE.
+ ZLAOL1 = 0.0188
+ ZLAOL2 = 0.0200
+ FLAOL = "input/opacity/lanl/ag89z0188.lanl"
+ FLAOL2 = "input/opacity/lanl/ag89z0200.lanl"
+
+ LPUREZ = .TRUE.
+ FPUREZ = "input/opacity/lanl/PURECO.DBGLAOL"
+
+ FFIRST = "input/models/pms/gs98/p100gs98z01757.ahbl"
+ FLAST='output/solarmodel/m100gs98difmod4p61sfiinewrc.last'
+ FMODPT='output/solarmodel/m100gs98difmod4p61sfiinewrc.full'
+ FSTOR='output/solarmodel/m100gs98difmod4p61sfiinewrc.store'
+ FTRACK='output/solarmodel/m100gs98difmod4p61sfiinewrc.track'
+ FSHORT='output/solarmodel/m100gs98difmod4p61sfiinewrc.short'
+
+ FPMOD='output/solarmodel/m100gs98difmod4p61sfiinewrc.pmod'
+ FPENV='output/solarmodel/m100gs98difmod4p61sfiinewrc.penv'
+ FPATM='output/solarmodel/m100gs98difmod4p61sfiinewrc.atm'
+
+ FOPALE="input/eos/opal1995/OPALeos.0188"
+ FOPALE01="input/eos/opal2001/001EOS0188z"
+ FOPALE06="input/eos/opal2006/EOSOPAL06Z0.018776"
+ FcondOpacP="input/opacity/potekhin/condall06.d"
+ FATM="input/atmos/kurucz/atmk1990p00.tab"
+ FALLARD="input/atmos/allard/Nextgen2.all"
+
+ FSCVH="input/eos/scv/h_tab_i.dat"
+ FSCVHE="input/eos/scv/he_tab_i.dat"
+ FSCVZ="input/eos/scv/z_tab_i.dat"
+
+ FISO=""
+ FDYN="input/monte/monte.396"
+ FSNU="output/solarmodel/m100gs98difmod4p61sfiinewrc.snu"
+ FSCOMP="output/solarmodel/m100gs98difmod4p61sfiinewrc.excomp"
+ FDEBUG="output/solarmodel/m100gs98difmod4p61sfiinewrc.debug"
+ FMILNE="output/solarmodel/m100gs98difmod4p61sfiinewrc.milne"
+
+ FFERMI="input/eos/yale/FERMI.TAB"
+
+ FMHD1=""
+ FMHD2=""
+ FMHD3=""
+ FMHD4=""
+ FMHD5=""
+ FMHD6=""
+ FMHD7=""
+ FMHD8=""
+
+ $END

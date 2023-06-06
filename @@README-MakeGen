@@ -1,0 +1,27 @@
+
+   MODEL and Makefile geterators                   LLP 03/18/2009
+   
+   This is a description of the generator of the MODEL program and 
+   the Makefile generator. All of these scripts and files must 
+   reside in the same directory as the MODEL source.
+   
+   MAKEMAKE - Makefile generator
+   The Makefile generator named Makemake. It sets the name of the 
+   executable, sets the compiler options, and uses the output of 
+   the Linux 'ls' command to generate the list of files to be used 
+   to compile the MODEL program.
+   
+   There are four filesinvolved: MakeBeg in which the name of the 
+   executable is set; MakeEnd in which the compiler options are set; 
+   MakeLS, a c program which generates the list of Fortran files to be 
+   used to compiled; and Makemake, a script which generates the make 
+   file, named "Makefile".
+   
+   MAKEMODEL - Generator of MODEL executable
+   There are two scripts used to generate the MODEL program. The first,
+   MakeModel, compiles and, if successful, generates the executable.
+   The date and time-stamped output goes to file "ListMakeModel". 
+   The second script, ClrListMakeModel, does as advertised, It clears,
+   then initialzes and date/time-stamps the compiler output file, 
+   "ListMakeModel."
+   

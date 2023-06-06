@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>yreclab | stellar evolution browser, batteries-included</title>
+    <style>
+      body {
+        font-family: arial;
+        margin: 0;
+        padding: none;
+      }
+      textarea {
+		  font-size: 14px;
+		  -webkit-box-sizing: border-box;
+		  -moz-box-sizing: border-box;
+		  box-sizing: border-box;
+	  }
+      #nml1 {
+		  position:absolute;
+		  top:84px;
+		  bottom:0px;
+		  left:3%;
+		  width: 45.5%;
+		  resize: none;
+		  height: 300px;
+	  }
+      #nml2 {
+		  position:absolute;
+		  top:84px;
+		  bottom:0px;
+		  right:3%;
+		  width: 45.5%;
+		  resize: none;
+		  height: 300px;
+	  }
+      #outputview {
+		  position:absolute;
+		  top:1704px;
+		  bottom:0px;
+		  left:3%;
+		  width: 94%;
+		  resize: none;
+		  height: 300px;
+	  }
+	  #nml1label {
+		  position:absolute;
+		  top:64px;
+		  /*left:3%;*/
+		  right:51.5%;
+		  font-size: 14px;
+		  font-family: sans-serif;
+	  }
+	  #nml2label {
+		  position:absolute;
+		  top:64px;
+		  right:3%;
+		  font-size: 14px;
+		  font-family: sans-serif;
+	  }
+	  #logo {
+		  position:absolute;
+		  top:16px;
+		  left:3%;
+		  font-size: 32px;
+		  font-family: serif;
+	  }
+	  #controlbuttons {
+		  position:absolute;
+		  top:396px;
+		  left:3%;
+	  }
+	  #step {
+		  position:relative;
+		  top:0px;
+		  left:0px;
+		  width:64px;
+		  font-size: 24px;
+		  font-family: sans-serif;
+	  }
+	  #run {
+		  position:relative;
+		  top:0px;
+		  left:15px;
+		  width:64px;
+		  font-size: 24px;
+		  font-family: sans-serif;
+	  }
+	  #pause {
+		  position:relative;
+		  top:0px;
+		  left:30px;
+		  font-size: 24px;
+		  font-family: sans-serif;
+	  }
+	  #loader {
+		  position:relative;
+		  top:-27px;
+		  left:260px;
+		  border: 6px solid #ddd;
+		  border-top: 6px solid #000;
+		  border-right: 6px solid #000;
+		  border-radius: 50%;
+		  width: 10px;
+		  height: 10px;
+		  animation: spin 2s linear infinite;
+	  }
+	  @keyframes spin {
+		  0% { transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); }
+	  }
+	  #selectordiv {
+		  position:absolute;
+		  top:1674px;
+		  left:3%;
+	  }
+	  #selectordiv > span {
+		  font-size: 14px;
+		  font-family: sans-serif;
+	  }
+	  #selectorview {
+		  font-size: 16px;
+		  font-family: sans-serif;
+	  }
+	  #viewer1 {
+		  position:absolute;
+		  top:444px;
+		  left:3%;
+		  width: 94%;
+		  height:390px;
+	  }
+	  #viewer2 {
+		  position:absolute;
+		  top:844px;
+		  left:3%;
+		  width: 94%;
+		  height:390px;
+	  }
+	  #viewer3 {
+		  position:absolute;
+		  top:1254px;
+		  left:3%;
+		  width: 94%;
+		  height:390px;
+	  }
+	  #logo > span {
+		  color:#888;
+		  font-size:18px;
+	  }
+	  #logo > a {
+		  color:#aaa;
+		  font-size:18px;
+		  text-decoration: none;
+	  }
+	  #logo > a:hover {
+		  color:#FA8000;
+	  }
+	  #selectorstruct{
+		  position:absolute;
+		  top:1244px;
+		  left:3%;
+	  }
+	  #selectorstructcoord1 {
+		  position:relative;
+		  top:10px;
+		  font-size: 16px;
+		  font-family: sans-serif;
+		  left:120px;
+	  }
+	  #selectorstructcoord2 {
+		  position:relative;
+		  top:10px;
+		  font-size: 16px;
+		  font-family: sans-serif;
+		  left:135px;
+	  }
+    </style>
+  </head>
+  <body>
+	  <div id='logo'><a href='' style='font-size:inherit;color:inherit'>yrec<span style='color:#FA8000;font-size:inherit'>lab</span></a> <span id='version'>v.4.31</span> <span>|</span> <a href='about'>docs</a> <span>|</span> <a href='about'>github</a> <span>|</span> <a href='about'>about</a></div>
+	  <div id='controlbuttons'>
+	  <button onclick="set_nml(step_yrec_run);" id='step'>Step</button>
+	  <button onclick="set_nml(start_yrec_run);document.getElementById('run').setAttribute('disabled', 'disabled');document.getElementById('step').setAttribute('disabled', 'disabled')" id='run'>Run</button>
+	  <button onclick="stop_yrec_run();document.getElementById('run').removeAttribute('disabled');document.getElementById('step').removeAttribute('disabled')" id='pause'>Pause</button> <div id='loader' style='display:none'></div> </div>
+	  <div id='nml1label'>NML1: control <input id='downloadnml1' value='Download' type='button' /></div>
+	  <div id='nml2label'>NML2: physics <input id='downloadnml2' value='Download' type='button' /></div>
+	  <textarea id='nml1' spellcheck="false"></textarea>
+	  <textarea id='nml2' spellcheck="false"></textarea>
+	  <div id="viewer1"></div>
+	  <div id="viewer2"></div>
+	  <div id="viewer3"></div>
+	  <div id="selectorstruct">
+	  <select name= "type" id='selectorstructcoord1' onchange= "(function(focus_new_val){structcoord1 = focus_new_val;refreshplot3()})(this.value);">
+		  <option value= "mass">x:Mass</option>
+		  <option value= "shell">x:Shell</option>
+		  <option value= "radius">x:Radius</option>
+	  </select>
+	  <select name= "type" id='selectorstructcoord2' onchange= "(function(focus_new_val){structcoord2 = focus_new_val;refreshplot3()})(this.value);">
+		  <option value= "radius">y:Radius</option>
+		  <option value= "mass">y:Mass</option>
+		  <option value= "luminosity">y:logLuminosity</option>
+		  <option value= "pressure">y:logPressure</option>
+		  <option value= "temperature">y:logTemperature</option>
+		  <option value= "density">y:logDensity</option>
+		  <option value= "omega">y:Omega</option>
+	  </select>
+	  </div>
+	  <div id="selectordiv"><span>File viewer:</span> <select name= "type" id='selectorview' onchange= "(function(focus_new_val){viewingfile = focus_new_val;document.getElementById('outputview').value = outdata[focus_new_val];})(this.value);">
+		  <option value= "last">Last</option>
+		  <option value= "track">Track</option>
+		  <option value= "full">Full</option>
+		  <option value= "store">Store</option>
+		  <option value= "short">Short</option>
+	  </select> <input id='downloadoutput' value='Download' type='button' /></div>
+	  <textarea readonly id='outputview' spellcheck="false"></textarea>
+      <script async type="text/javascript" src="yrec.js"></script>
+      
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.4.3.min.js"></script>
+
+
+      <script type="text/javascript">
+      var worker = new Worker('worker.js');
+      outdata = {}
+      outdata["track"] = "";
+      outdata["last"] = "";
+      outdata["full"] = "";
+      outdata["store"] = "";
+      outdata["short"] = "";
+      viewingfile = "last";
+      structcoord1 = "mass";
+      structcoord2 = "radius";
+      //yrec_process = 0;
+      yrec_paused = 0;
+  
+	  var date = new Date();
+	  time_fname = date.getTime();
+	  
+      worker.addEventListener('message', function(e) {
+		  console.log("EVENT", e.data);
+		  document.getElementById("loader").style.display = 'none';
+		  if(e.data.split("|")[0] == "ready"){
+			  worker.postMessage("get_nml1|");
+			  worker.postMessage("get_nml2|");
+		  }
+		  if(e.data.split("|")[0] == "chain" && yrec_paused == 0){
+			  worker.postMessage("chain");
+		  }
+		  if(e.data.split("|")[0] == "nml1"){
+			  document.getElementById("nml1").value = e.data.split("|")[1];
+		  }
+		  if(e.data.split("|")[0] == "nml2"){
+			  document.getElementById("nml2").value = e.data.split("|")[1];
+		  }
+		  if(e.data.split("|")[0] == "track"){
+			  outdata["track"] = e.data.split("|")[1];
+			  if (viewingfile == 'track'){
+				  document.getElementById("outputview").value = outdata["track"];
+			  }
+			  refreshplot1();
+		  }
+		  if(e.data.split("|")[0] == "last"){
+			  outdata["last"] = e.data.split("|")[1];
+			  if (viewingfile == 'last'){
+				  document.getElementById("outputview").value = outdata["last"];
+			  }
+			  refreshplot2();
+			  refreshplot3();
+		  }
+		  if(e.data.split("|")[0] == "full"){
+			  outdata["full"] = e.data.split("|")[1];
+			  if (viewingfile == 'full'){
+				  document.getElementById("outputview").value = outdata["full"];
+			  }
+		  }
+		  if(e.data.split("|")[0] == "store"){
+			  outdata["store"] = e.data.split("|")[1];
+			  if (viewingfile == 'store'){
+				  document.getElementById("outputview").value = outdata["store"];
+			  }
+		  }
+		  if(e.data.split("|")[0] == "short"){
+			  outdata["short"] = e.data.split("|")[1];
+			  if (viewingfile == 'short'){
+				  document.getElementById("outputview").value = outdata["short"];
+			  }
+		  }
+	  });
+	  
+	  /*function start_yrec_run(){
+		  yrec_process = setInterval("worker.postMessage('step')", 2000)
+	  }
+	  
+	  function stop_yrec_run(){
+		  clearInterval(yrec_process);
+	  }*/
+	  
+	  function set_nml(callback){
+		  worker.postMessage("set_nml1|"+document.getElementById("nml1").value);
+		  worker.postMessage("set_nml2|"+document.getElementById("nml2").value);
+		  setTimeout(callback, 5000);
+	  }
+	  
+	  function step_yrec_run(){
+		  document.getElementById("loader").style.display = '';
+		  yrec_paused = 0;
+		  worker.postMessage("step");
+		  document.getElementById("nml1").setAttribute('readonly', true);
+		  document.getElementById("nml2").setAttribute('readonly', true);
+		  document.getElementById("nml1").setAttribute('disabled', true);
+		  document.getElementById("nml2").setAttribute('disabled', true);
+	  }
+	  
+	  function start_yrec_run(){
+		  document.getElementById("loader").style.display = '';
+		  yrec_paused = 0;
+		  worker.postMessage("chain");
+		  document.getElementById("nml1").setAttribute('readonly', true);
+		  document.getElementById("nml2").setAttribute('readonly', true);
+		  document.getElementById("nml1").setAttribute('disabled', true);
+		  document.getElementById("nml2").setAttribute('disabled', true);
+	  }
+	  
+	  function stop_yrec_run(){
+		  yrec_paused = 1;
+	  }
+  
+		// create a data source to hold data
+		const source1 = new Bokeh.ColumnDataSource({
+			data: { x: [], y: [] }
+		});
+		const curr_source1 = new Bokeh.ColumnDataSource({
+			data: { x: [], y: [] , z: [] }
+		});
+
+		// make a plot with some tools
+		const plot1 = Bokeh.Plotting.figure({
+			title: 'Hertzsprung-Russell Diagram',
+			tools: "pan,wheel_zoom,box_zoom,reset,save",
+			height: 390,
+			width: 585,
+			x_axis_label: 'log Effective Temperature (Kelvin)',
+			y_axis_label: 'log Luminosity (Solar Luminosities)',
+		});
+
+		// add a line with data from the source
+		plot1.line({ field: "x" }, { field: "y" }, {
+			source: source1,
+			line_width: 1
+		});
+		
+		plot1.scatter({ field: "x" }, { field: "y" }, {
+			source: curr_source1,
+			size: 10,
+			fill_color:"#74add1",
+		});
+		
+		plot1.text({ field: "x" }, { field: "y" }, { field: "z" }, {
+			source: curr_source1,
+			size: 10,
+			fill_color:"#74add1",
+			x_offset: 15,
+			y_offset: 8,
+		});
+		
+		plot1.xgrid[0].properties.grid_line_color.set_value(null)
+		plot1.ygrid[0].properties.grid_line_color.set_value(null)
+		
+		plot1.x_range.flipped = true;
+		
+		// create a data source to hold data
+		const source2 = new Bokeh.ColumnDataSource({
+			data: { x: [], y: [] }
+		});
+		/*const curr_source2 = new Bokeh.ColumnDataSource({
+			data: { x: [], y: [] , z: [] }
+		});*/
+
+		// make a plot with some tools
+		const plot2 = Bokeh.Plotting.figure({
+			title: 'Temperature-Pressure Plot',
+			tools: "pan,wheel_zoom,box_zoom,reset,save",
+			height: 390,
+			width: 585,
+			x_axis_label: 'log Pressure (dyn cm-2)',
+			y_axis_label: 'log Temperature (Kelvin)',
+		});
+
+		// add a line with data from the source
+		plot2.line({ field: "x" }, { field: "y" }, {
+			source: source2,
+			line_width: 1,
+			color: 'black'
+		});
+		
+		/*plot2.scatter({ field: "x" }, { field: "y" }, {
+			source: curr_source2,
+			size: 10,
+			fill_color:"#74add1",
+		});
+		
+		plot2.text({ field: "x" }, { field: "y" }, { field: "z" }, {
+			source: curr_source2,
+			size: 10,
+			fill_color:"#74add1",
+			x_offset: 15,
+			y_offset: 8,
+		});*/
+		
+		plot2.xgrid[0].properties.grid_line_color.set_value(null)
+		plot2.ygrid[0].properties.grid_line_color.set_value(null)
+		
+		// create a data source to hold data
+		const source3 = new Bokeh.ColumnDataSource({
+			data: { x: [], y: [] }
+		});
+
+		// make a plot with some tools
+		const plot3 = Bokeh.Plotting.figure({
+			title: 'Structure',
+			tools: "pan,wheel_zoom,box_zoom,reset,save",
+			height: 390,
+			width: 585,
+			x_axis_label: 'Mass (Solar Masses)',
+			y_axis_label: 'Radius (Solar Radii)',
+		});
+
+		// add a line with data from the source
+		plot3.line({ field: "x" }, { field: "y" }, {
+			source: source3,
+			line_width: 1,
+			color: 'black'
+		});
+		
+		plot3.xgrid[0].properties.grid_line_color.set_value(null)
+		plot3.ygrid[0].properties.grid_line_color.set_value(null)
+		
+		plot1.xaxis[0].properties.axis_label_text_font_size.set_value("12pt")
+		plot1.yaxis[0].properties.axis_label_text_font_size.set_value("12pt")
+		plot2.xaxis[0].properties.axis_label_text_font_size.set_value("12pt")
+		plot2.yaxis[0].properties.axis_label_text_font_size.set_value("12pt")
+		plot3.xaxis[0].properties.axis_label_text_font_size.set_value("12pt")
+		plot3.yaxis[0].properties.axis_label_text_font_size.set_value("12pt")
+		
+		plot1.xaxis[0].properties.major_label_text_font_size.set_value("10pt")
+		plot1.yaxis[0].properties.major_label_text_font_size.set_value("10pt")
+		plot2.xaxis[0].properties.major_label_text_font_size.set_value("10pt")
+		plot2.yaxis[0].properties.major_label_text_font_size.set_value("10pt")
+		plot3.xaxis[0].properties.major_label_text_font_size.set_value("10pt")
+		plot3.yaxis[0].properties.major_label_text_font_size.set_value("10pt")
+		
+		// show the plot, appending it to the end of the current section
+		Bokeh.Plotting.show(plot1, '#viewer1');
+		Bokeh.Plotting.show(plot2, '#viewer2');
+		Bokeh.Plotting.show(plot3, '#viewer3');
+
+		function refreshplot1() {
+			// add data --- all fields must be the same length.
+			source1.data.x = [];
+			source1.data.y = [];
+			for (var xiter=0;xiter<outdata["track"].split("\n").length-15;xiter++){
+				source1.data.x.push(Number(outdata["track"].split("\n")[14+xiter].slice(19+16*4,33+16*4)));
+				source1.data.y.push(Number(outdata["track"].split("\n")[14+xiter].slice(19+16*1-1,33+16*1)));
+				curr_source1.data.x = [Number(outdata["track"].split("\n")[14+xiter].slice(19+16*4,33+16*4)),];
+				curr_source1.data.y = [Number(outdata["track"].split("\n")[14+xiter].slice(19+16*1-1,33+16*1)),];
+				curr_source1.data.z = [parseFloat(1000*Number(outdata["track"].split("\n")[14+xiter].slice(19+16*0,33+16*0))).toFixed(2)+" Myr",];
+				/*curr_source2.data.z = [parseFloat(1000*Number(outdata["track"].split("\n")[14+xiter].slice(19+16*0,33+16*0))).toFixed(2)+" Myr",];*/
+			}
+
+			// update the data source with local changes
+			source1.change.emit()
+			curr_source1.change.emit()
+		}
+
+		function refreshplot2() {
+			source2.data.x = [];
+			source2.data.y = [];
+			for (var xiter=0;xiter<outdata["last"].split("\n").length-10;xiter++){
+				source2.data.x.push(Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24,7+17+18+24+18)));
+				source2.data.y.push(Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24+19,7+17+18+24+18+18)));
+				//curr_source2.data.x = [Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24,7+17+18+24+18)),];
+				//curr_source2.data.y = [Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24+19,7+17+18+24+18+18)),];
+			}
+
+			// update the data source with local changes
+			source2.change.emit()
+			//curr_source2.change.emit()
+			plot2.title.text = "Temperature-Pressure Plot "+parseFloat(1000*Number(outdata["last"].split("\n")[0].slice(87,101))).toFixed(2)+" Myr"
+		}
+
+		function refreshplot3() {
+			source3.data.x = [];
+			source3.data.y = [];
+			for (var xiter=0;xiter<outdata["last"].split("\n").length-10;xiter++){
+				
+				if(structcoord1 == "shell"){
+					plot3.xaxis[0].properties.axis_label.set_value("Shell");
+					source3.data.x.push(Number(outdata["last"].split("\n")[9+xiter].slice(0,6)));
+				}
+				else if(structcoord1 == "mass"){
+					plot3.xaxis[0].properties.axis_label.set_value("Mass (Solar Masses)");
+					source3.data.x.push(Math.pow(10,Number(outdata["last"].split("\n")[9+xiter].slice(7,7+17)) - 3.32986566173911455459e1));
+				}
+				else if(structcoord1 == "radius"){
+					plot3.xaxis[0].properties.axis_label.set_value("Radius (Solar Radii)");
+					source3.data.x.push(Math.pow(10,Number(outdata["last"].split("\n")[9+xiter].slice(7+18,7+17+18)) - 1.08388490907372553162e1));
+				}
+				
+				if(structcoord2 == "mass"){
+					plot3.yaxis[0].properties.axis_label.set_value("Mass (Solar Masses)");
+					source3.data.y.push(Math.pow(10,Number(outdata["last"].split("\n")[9+xiter].slice(7,7+17)) - 3.32986566173911455459e1));
+				}
+				else if(structcoord2 == "radius"){
+					plot3.yaxis[0].properties.axis_label.set_value("Radius (Solar Radii)");
+					//plot3.y_axis_label.text = "Radius (Solar Radii)";
+					source3.data.y.push(Math.pow(10,Number(outdata["last"].split("\n")[9+xiter].slice(7+18,7+17+18)) - 1.08388490907372553162e1));
+				}
+				else if(structcoord2 == "luminosity"){
+					plot3.yaxis[0].properties.axis_label.set_value("log Luminosity (Solar Luminosities)");
+					//plot3.y_axis_label.text = "log Luminosity (Solar Luminosities)";
+					source3.data.y.push(Math.log10(Number(outdata["last"].split("\n")[9+xiter].slice(7+18+18,7+17+18+24))));
+				}
+				else if(structcoord2 == "pressure"){
+					plot3.yaxis[0].properties.axis_label.set_value("log Pressure (dyn cm-2)");
+					//plot3.y_axis_label.text = "log Pressure (dyn cm-2)";
+					source3.data.y.push(Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24,7+17+18+24+18)));
+				}
+				else if(structcoord2 == "temperature"){
+					plot3.yaxis[0].properties.axis_label.set_value("log Temperature (Kelvin)");
+					//plot3.y_axis_label.text = "log Temperature (Kelvin)";
+					source3.data.y.push(Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24+19,7+17+18+24+18+18)));
+				}
+				else if(structcoord2 == "density"){
+					plot3.yaxis[0].properties.axis_label.set_value("log Density (g cm-3)");
+					//plot3.y_axis_label.text = "log Density (g cm-3)";
+					source3.data.y.push(Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24+19+18,7+17+18+24+18+18+18)));
+				}
+				else if(structcoord2 == "omega"){
+					plot3.yaxis[0].properties.axis_label.set_value("Rotation");
+					//plot3.y_axis_label.text = "Rotation";
+					source3.data.y.push(Number(outdata["last"].split("\n")[9+xiter].slice(7+17+18+24+19+18+18,7+17+18+24+18+18+18+24)));
+				}
+			}
+
+			// update the data source with local changes
+			source3.change.emit()
+			plot3.xaxis[0].properties.axis_label.change.emit();
+			plot3.yaxis[0].properties.axis_label.change.emit();
+		}
+		document.getElementById("downloadoutput").onclick = function(){
+		  var l = document.createElement("a");
+		  l.href = "data:x-application/text," + escape(document.getElementById("outputview").value);
+		  var fname = time_fname;
+		  l.setAttribute("download", fname+"."+viewingfile);
+		  l.click();
+		}
+		document.getElementById("downloadnml1").onclick = function(){
+		  var l = document.createElement("a");
+		  l.href = "data:x-application/text," + escape(document.getElementById("nml1").value);
+		  var fname = time_fname;
+		  l.setAttribute("download", fname+".nml1");
+		  l.click();
+		}
+		document.getElementById("downloadnml2").onclick = function(){
+		  var l = document.createElement("a");
+		  l.href = "data:x-application/text," + escape(document.getElementById("nml2").value);
+		  var fname = time_fname;
+		  l.setAttribute("download", fname+".nml2");
+		  l.click();
+		}
+    </script>
+    <!-- outdata["track"].split("\n")[14].slice(19+16*0,33+16*0) gives age
+         outdata["track"].split("\n")[14].slice(19+16*1,33+16*1) gives logL/Lsun
+         outdata["track"].split("\n")[14].slice(19+16*2,33+16*2) gives logR/Rsun
+         outdata["track"].split("\n")[14].slice(19+16*3,33+16*3) gives logg
+         outdata["track"].split("\n")[14].slice(19+16*4,33+16*4) gives logTeff 
+         After the 6th index (Mconv env), it doesn't work anymore; it picks up as:
+         outdata["track"].split("\n")[15].slice(19+16*7,33-8+16*7) (This is for R)
+         Then outdata["track"].split("\n")[15].slice(19+8+16*7,33-8+12+16*7) (This is for T)
+         outdata["track"].split("\n")[15].slice(19+8+16*7+12,33-8+12+16*7+12) for rho
+         outdata["track"].split("\n")[15].slice(19+8+16*7+12*2,33-8+12+16*7+12*2) for P
+         outdata["track"].split("\n")[15].slice(19+8+16*7+12*3,33-8+12+16*7+12*3) for cappa env
+         outdata["track"].split("\n")[15].slice(19+8+16*7+12*4-1,33-8+12+16*7+12*4+4) for logT
+         outdata["track"].split("\n")[15].slice(19+8+16*7+12*4+15,33-8+12+16*7+12*4+4+16) for logrho
+         outdata["track"].split("\n")[15].slice(19+8+16*7+12*4+15+16,33-8+12+16*7+12*4+4+16+16) for logP
+         Let's do a central pressure/temperature plot and also a HRD plot.
+         What's Pc and Tc?
+         12 is logT, 13 is logrho, 14 is logP...
+         for (var x=0;x<264;x++){console.log(Number(outdata["track"].split("\n")[14+x].slice(19+16*3,33+16*3)))}
+         
+         
+         For structures:
+         outdata["last"].split("\n")[9].slice(7,7+17) gives logMass
+         outdata["last"].split("\n")[9].slice(7+18,7+17+18) gives logRadius
+         outdata["last"].split("\n")[9].slice(7+18+18,7+17+18+24) gives luminosity
+         outdata["last"].split("\n")[9].slice(7+17+18+24,7+17+18+24+18) gives log pressure
+         outdata["last"].split("\n")[9].slice(7+17+18+24+19,7+17+18+24+18+18) gives log temperature
+         outdata["last"].split("\n")[9].slice(7+17+18+24+19+18,7+17+18+24+18+18+18) gives log density
+         outdata["last"].split("\n")[9].slice(7+17+18+24+19+18+18,7+17+18+24+18+18+18+24) gives Omega
+         
+         age is outdata["last"].split("\n")[0].slice(87,101)
+         -->
+  </body>
+</html>
