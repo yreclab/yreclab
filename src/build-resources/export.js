@@ -4,12 +4,6 @@ if (typeof Module !== 'undefined') {
   if (Module._f_init) Module._f_init();
 
   console.log("YREC runtime initialized");
-
-  // Now call your translated Fortran entry
-  const rc = Module._MAIN__();
-  console.log("YREC finished with code:", rc);
-
-  if (Module._f_exit) Module._f_exit();
 };
 
 }

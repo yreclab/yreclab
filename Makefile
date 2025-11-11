@@ -17,8 +17,8 @@ CFLAGS   = -O3 -fcommon -fno-lto -ICLAPACK-3.2.1/INCLUDE -emit-llvm -c
 CFLAGS  += -ffast-math -fno-math-errno
 LDFLAGS  = -O3 -s WASM=1 \
            -s INITIAL_MEMORY=134217728 -s TOTAL_MEMORY=134217728 \
-           -s EXPORTED_FUNCTIONS='["_MAIN__"]' \
-           -fno-lto -s ALLOW_MEMORY_GROWTH=1 \
+           -s EXPORTED_FUNCTIONS='["_MAIN__", "_step_"]' \
+           -fcommon -fno-lto -s ALLOW_MEMORY_GROWTH=1 \
            --post-js src/build-resources/export.js \
            --embed-file src/build-resources/yrec8.nml1@yrec8.nml1 --embed-file src/build-resources/yrec8.nml2@yrec8.nml2 \
            --embed-file src/build-resources/input@input --embed-file src/build-resources/output@output
@@ -70,7 +70,7 @@ YREC_SRCS := $(addprefix $(YREC_SRC_DIR)/, \
   tridiag_gs.c vcirc.c viscos.c wcz.c wczimp.c wind.c wrthead.c \
   wrtlst.c wrtmil.c wrtmod.c wrtmonte.c wrtout.c wtime.c xrng4.c \
   xtime.c yalo3d.c ykoeff.c yllo2d2.c yllo2d.c yllo3d2.c yllo3d.c \
-  ylloc.c ysplin.c ytime.c zero.c zfermim12.c zsulaol.c)
+  ylloc.c ysplin.c ytime.c zero.c zfermim12.c zsulaol.c step.c)
 
 # libf2c runtime
 LIBF2C_SRCS := $(addprefix $(LIBF2C_DIR)/, \
