@@ -1,84 +1,77 @@
-var module={};
-
-var Module = {
-    preRun:[],
-    onRuntimeInitialized: function load_done_callback() {
-        console.info("The Module is loaded and is accessible here", Module);
-        self.postMessage("ready|");
-    },
-    YREC_return_val: -1,
-};
-
+// worker.js
 importScripts('yrec.js');
 
-self.addEventListener('message', function(e) {
-if (e.data == 'run' && Module.onRuntimeInitialized && Module.YREC_return_val == -1){
-	while(Module.YREC_return_val == -1){
-		Module.YREC_return_val = Module._MAIN__();
-		self.postMessage("track|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.track')));
-		self.postMessage("full|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.full')));
-		self.postMessage("short|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.short')));
-		self.postMessage("store|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.store')));
-		self.postMessage("last|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.last')));
-	}
-}
-else if (e.data == 'chain' && Module.onRuntimeInitialized && Module.YREC_return_val == -1){
-	Module.YREC_return_val = Module._MAIN__();
-	self.postMessage("track|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.track')));
-	self.postMessage("full|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.full')));
-	self.postMessage("short|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.short')));
-	self.postMessage("store|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.store')));
-	self.postMessage("last|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.last')));
-	self.postMessage("chain|");
-}
-else if (e.data == 'step' && Module.onRuntimeInitialized && Module.YREC_return_val == -1){
-	Module.YREC_return_val = Module._MAIN__();
-	self.postMessage("track|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.track')));
-	self.postMessage("full|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.full')));
-	self.postMessage("short|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.short')));
-	self.postMessage("store|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.store')));
-	self.postMessage("last|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.last')));
-}
-else if (e.data == 'get_track' && Module.onRuntimeInitialized){
-	self.postMessage("track|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.track')));
-}
-else if (e.data == 'get_full' && Module.onRuntimeInitialized){
-	self.postMessage("full|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.full')));
-}
-else if (e.data == 'get_short' && Module.onRuntimeInitialized){
-	self.postMessage("short|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.short')));
-}
-else if (e.data == 'get_store' && Module.onRuntimeInitialized){
-	self.postMessage("store|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.store')));
-}
-else if (e.data == 'get_last' && Module.onRuntimeInitialized){
-	self.postMessage("last|"+new TextDecoder().decode(FS.readFile('output/solarmodel/m100gs98difmod4p61sfiinewrc.last')));
-}
-else if (e.data.split("|")[0] == "set_nml1" && Module.onRuntimeInitialized){
-	var yrec8_nml1_string_out = e.data.split("|")[1];
-	var yrec8_nml1_binary_out = new TextEncoder().encode(yrec8_nml1_string_out);
-	FS.writeFile('yrec8.nml1', yrec8_nml1_binary_out);
-	var yrec8_nml1_binary_in = FS.readFile('yrec8.nml1');
-	var nml1_str = new TextDecoder().decode(yrec8_nml1_binary_in);
-	self.postMessage("nml1|"+nml1_str);
-}
-else if (e.data.split("|")[0] == "set_nml2" && Module.onRuntimeInitialized){
-	var yrec8_nml2_string_out = e.data.split("|")[1];
-	var yrec8_nml2_binary_out = new TextEncoder().encode(yrec8_nml2_string_out);
-	FS.writeFile('yrec8.nml2', yrec8_nml2_binary_out);
-	var yrec8_nml2_binary_in = FS.readFile('yrec8.nml2');
-	var nml2_str = new TextDecoder().decode(yrec8_nml2_binary_in);
-	self.postMessage("nml2|"+nml2_str);
-}
-else if (e.data.split("|")[0] == "get_nml1" && Module.onRuntimeInitialized){
-	var yrec8_nml1_binary_in = FS.readFile('yrec8.nml1');
-	var nml1_str = new TextDecoder().decode(yrec8_nml1_binary_in);
-	self.postMessage("nml1|"+nml1_str);
-}
-else if (e.data.split("|")[0] == "get_nml2" && Module.onRuntimeInitialized){
-	var yrec8_nml2_binary_in = FS.readFile('yrec8.nml2');
-	var nml2_str = new TextDecoder().decode(yrec8_nml2_binary_in);
-	self.postMessage("nml2|"+nml2_str);
-}
+let yrecModule;
+let yrecReturn = -1;
+
+(async () => {
+  const config = {
+    preRun: [],
+    onRuntimeInitialized() {
+      console.info("YREC initialized.");
+      self.postMessage("ready|");
+    },
+  };
+
+  yrecModule = await YREC(config);
+})();
+
+self.addEventListener('message', async (e) => {
+    if (!yrecModule) {
+        console.warn("Module not ready yet");
+        return;
+    }
+
+    const msg = e.data;
+
+    if (msg === 'run') {
+        while (yrecModule.YREC_return_val === -1) {
+            yrecModule.YREC_return_val = yrecModule._step_();
+            sendOutputs("run");
+        }
+    } else if (msg === 'chain') {
+        yrecModule.YREC_return_val = yrecModule._step_();
+        sendOutputs("chain");
+        self.postMessage("chain|");
+    } else if (msg === 'step') {
+        yrecModule.YREC_return_val = yrecModule._step_();
+        sendOutputs("step");
+    }
+
+    else if (msg === 'get_track') self.postMessage("track|" + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.track"));
+    else if (msg === 'get_full')  self.postMessage("full|"  + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.full"));
+    else if (msg === 'get_short') self.postMessage("short|" + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.short"));
+    else if (msg === 'get_store') self.postMessage("store|" + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.store"));
+    else if (msg === 'get_last')  self.postMessage("last|"  + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.last"));
+
+    else if (msg.startsWith("set_nml1|")) {
+        const data = msg.split("|")[1];
+        yrecModule.FS.writeFile("yrec8.nml1", new TextEncoder().encode(data));
+        self.postMessage("nml1|" + readFileSafe("yrec8.nml1"));
+    } else if (msg.startsWith("set_nml2|")) {
+        const data = msg.split("|")[1];
+        yrecModule.FS.writeFile("yrec8.nml2", new TextEncoder().encode(data));
+        self.postMessage("nml2|" + readFileSafe("yrec8.nml2"));
+    } else if (msg.startsWith("get_nml1")) {
+        self.postMessage("nml1|" + readFileSafe("yrec8.nml1"));
+    } else if (msg.startsWith("get_nml2")) {
+        self.postMessage("nml2|" + readFileSafe("yrec8.nml2"));
+    }
 }, false);
 
+function readFileSafe(path) {
+    try {
+        return new TextDecoder().decode(yrecModule.FS.readFile(path));
+    } catch (e) {
+        console.warn(`Missing file: ${path}`);
+        return "";
+    }
+}
+
+function sendOutputs(tag) {
+    self.postMessage("track|" + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.track"));
+    self.postMessage("full|"  + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.full"));
+    self.postMessage("short|" + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.short"));
+    self.postMessage("store|" + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.store"));
+    self.postMessage("last|"  + readFileSafe("output/solarmodel/m100gs98difmod4p61sfiinewrc.last"));
+}

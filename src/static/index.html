@@ -177,7 +177,7 @@
     </style>
   </head>
   <body>
-	  <div id='logo'><a href='' style='font-size:inherit;color:inherit'>yrec<span style='color:#FA8000;font-size:inherit'>lab</span></a> <span id='version'>v.4.31</span> <span>|</span> <a href='https://github.com/yreclab/yreclab'>github</a> <span>|</span> <a href='about'>about</a></div>
+	  <div id='logo'><a href='' style='font-size:inherit;color:inherit'>yrec<span style='color:#FA8000;font-size:inherit'>lab</span></a> <span id='version'>v.5.1</span> <span>|</span> <a href='https://github.com/yreclab/yreclab'>github</a> <span>|</span> <a href='about'>about</a></div>
 	  <div id='controlbuttons'>
 	  <button onclick="set_nml(step_yrec_run);" id='step'>Step</button>
 	  <button onclick="set_nml(start_yrec_run);document.getElementById('run').setAttribute('disabled', 'disabled');document.getElementById('step').setAttribute('disabled', 'disabled')" id='run'>Run</button>
@@ -241,7 +241,7 @@
 	  time_fname = date.getTime();
 	  
       worker.addEventListener('message', function(e) {
-		  console.log("EVENT", e.data);
+		  //console.log("EVENT", e.data);
 		  document.getElementById("loader").style.display = 'none';
 		  if(e.data.split("|")[0] == "ready"){
 			  worker.postMessage("get_nml1|");

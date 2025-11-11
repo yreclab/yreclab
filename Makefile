@@ -18,6 +18,8 @@ CFLAGS  += -ffast-math -fno-math-errno
 LDFLAGS  = -O3 -s WASM=1 \
            -s INITIAL_MEMORY=134217728 -s TOTAL_MEMORY=134217728 \
            -s EXPORTED_FUNCTIONS='["_MAIN__", "_step_"]' \
+           -sMODULARIZE -sEXPORT_NAME=YREC \
+           -s EXPORTED_RUNTIME_METHODS='["FS"]' \
            -fcommon -fno-lto -s ALLOW_MEMORY_GROWTH=1 \
            --post-js src/build-resources/export.js \
            --embed-file src/build-resources/yrec8.nml1@yrec8.nml1 --embed-file src/build-resources/yrec8.nml2@yrec8.nml2 \
@@ -101,7 +103,7 @@ BLAS_LIB   := $(BUILD)/blas.a
 # Targets
 .SUFFIXES: .c .bc
 
-all: $(BIN)/$(NAME).html
+all: $(BIN)/$(NAME).js
 
 # Ensure directory structure exists
 $(BUILD):
@@ -137,7 +139,7 @@ $(BLAS_LIB): $(BLAS_BC)
 	$(AR) rcs $@ $^
 
 # Final link into WebAssembly
-$(BIN)/$(NAME).html: $(YREC_BC) $(LIBF2C_LIB) $(LAPACK_LIB) $(BLAS_LIB)
+$(BIN)/$(NAME).js: $(YREC_BC) $(LIBF2C_LIB) $(LAPACK_LIB) $(BLAS_LIB)
 	$(CC) $^ $(LDFLAGS) -o $@; cp -r $(STATIC_DIR)/* $(BIN)
 
 # Clean

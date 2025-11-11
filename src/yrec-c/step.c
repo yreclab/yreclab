@@ -1589,13 +1589,13 @@ L15:
 /* MHP 10/24 GENERALIZED STOP CONDITIONS */
 /*     IF EVOLVING TO A GIVEN AGE AND AGE IS REACHED, KIND CARD IS DONE */
 /*       IF(LENDAG(NK).AND.ENDAGE(NK)-DAGE*1.0D9.LE.1.0D0)GOTO 110 */
+/* MHP 10/24 CHECK ALL STOP CONDITIONS, EXIT IF ANY SATISFIED */
+	lend_kind__ = FALSE_;
 	if (sett_1.lendag[zramp_1.nk - 1] && sett_1.endage[zramp_1.nk - 1] > 
 		0. && sett_1.endage[zramp_1.nk - 1] - theage_1.dage * 1e9 <= 
 		1.) {
-	    goto L110;
+	    lend_kind__ = TRUE_;
 	}
-/* MHP 10/24 CHECK ALL STOP CONDITIONS, EXIT IF ANY SATISFIED */
-	lend_kind__ = FALSE_;
 	if (sett_1.lendag[zramp_1.nk - 1] && sett_1.end_dcen__[zramp_1.nk - 1]
 		 > 0. && hcomp[11] < sett_1.end_dcen__[zramp_1.nk - 1]) {
 	    s_wsfe(&io___173);
@@ -1634,7 +1634,7 @@ L15:
 /* END OF RUN */
 /* G Somers 11/14, CHANGE CALL TO PUTSTORE INSTEAD OF WRTLST. */
 /* STORE LAST MODEL IN ISTOR IF LSTORE, LSTPCH, AND LPUNCH ARE .TRUE. */
-L110:
+/* L110: */
 	if (ccout_1.lstore && ccout2_1.lstpch && state_1.lpunch) {
 	    putstore_(hcomp, hd, hl, hp, hr, hs, ht, lc, trit, tril, ps, ts, 
 		    rs, cfenv, &ftri, tlumx, &jcore, &jenv, &model, &m, &
@@ -1647,8 +1647,9 @@ L110:
 	++state_1.modeln;
 	if (state_1.modeln > ckind_1.nmodls[zramp_1.nk - 1]) {
 	    ++zramp_1.nk;
+	    if (zramp_1.nk > ckind_1.numrun) return 0;
 	}
     }
-    return 0;
+    return -1;
 } /* step_ */
 

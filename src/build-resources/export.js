@@ -1,12 +1,10 @@
-if (typeof Module !== 'undefined') {
-  Module.onRuntimeInitialized = () => {
-  // libf2c runtime setup
-  if (Module._f_init) Module._f_init();
-
+if (typeof YREC !== 'undefined') {
+  YREC.onRuntimeInitialized = () => {
   console.log("YREC runtime initialized");
+  self.postMessage("ready|");
 };
 
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = Module;
+  module.exports = YREC;
 }
